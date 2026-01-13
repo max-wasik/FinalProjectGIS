@@ -1,3 +1,9 @@
-=> Cleanup vom Code:
+=> Cleanup vom Code: Max:
 => Backend Datenspeicherung: Joseph: 
 => Frontend Design:
+=> Froschungsfrage + Umfragedesign: 
+    Places where poeople feel unsafe while getting around
+    per foot, bike or car?
+    at what time of the day? day, night or both?
+
+
