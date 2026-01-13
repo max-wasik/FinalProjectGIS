@@ -1,0 +1,392 @@
+/* ==================================================
+   BASE LAYOUT
+================================================== */
+
+/* Reset & base styles */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f7f7f7;
+    color: #222;
+    line-height: 1.6;
+}
+
+/* Container */
+#container {
+    display: flex;
+    height: calc(100vh - 150px); /* adjusted for header/footer spacing */
+}
+
+/* ==================================================
+   HEADER
+================================================== */
+
+.header {
+    position: relative;
+    height: 100vh;       /* responsive */
+    min-height: 500px;  /* smaller minimum for laptops */
+    overflow: hidden;
+    color: white;
+}
+
+/* Video wrapper */
+.video-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Video inside wrapper */
+.header-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;       /* ensures video covers the container */
+    object-position: center bottom; /* centers the video */
+    z-index: 0;
+    opacity: 0.7;
+}
+
+/* Overlay text in top-right corner */
+.header-overlay {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 2;
+    text-align: right;
+    color: white;
+}
+
+.header-overlay h1,
+.header-overlay h2,
+.header-overlay p {
+    margin: 0; /* remove default margins */
+    text-shadow: 0 0 10px rgba(0,0,0,0.7);
+}
+
+/* Overlay font sizes */
+.header-overlay h1 {
+    font-size: 3rem;
+}
+
+.header-overlay h2 {
+    font-size: 1.5rem;
+    font-weight: 300;
+}
+
+.header-overlay p {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: #ddd;
+}
+
+/* ==================================================
+   Responsive adjustments for header
+================================================== */
+@media (max-width: 1200px) {
+    .header {
+        min-height: 450px; /* smaller minimum for laptops */
+    }
+}
+
+@media (max-width: 900px) {
+    .header {
+        height: 60vh;
+    }
+    .header-overlay h1 {
+        font-size: 2rem;
+    }
+    .header-overlay h2 {
+        font-size: 1.2rem;
+    }
+    .header-overlay p {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .header {
+        height: 50vh;
+    }
+    .header-overlay h1 {
+        font-size: 1.6rem;
+    }
+    .header-overlay h2 {
+        font-size: 1rem;
+    }
+    .header-overlay p {
+        font-size: 0.7rem;
+    }
+}
+
+/* ==================================================
+   INTRO TEXT
+================================================== */
+
+.intro-text {
+    padding: 40px 30px;
+    text-align: center;
+    font-size: 1.25rem;
+    line-height: 1.85;
+    max-width: 900px;
+    margin: 40px auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    color: #333;
+    letter-spacing: 0.3px;
+    font-weight: 300;
+}
+
+/* ==================================================
+   BACK TO TOP BUTTON
+================================================== */
+
+.back-to-top {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    height: 55px;
+    width: 55px;
+    border-radius: 50%;
+    border: none;
+    background-color: #3ad310;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: 0.3s ease;
+    display: block;
+}
+
+.back-to-top:hover {
+    background-color: #1f6391;
+    transform: scale(1.1);
+}
+
+/* ==================================================
+   STORY + MAP CONTAINER
+================================================== */
+
+#story {
+    width: 40%;
+    overflow-y: scroll;
+    padding: 30px;
+    background: white;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+/* Story chapters */
+.chapter {
+    margin-bottom: 80px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #ddd;
+}
+
+.chapter h3 {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+}
+
+.chapter p {
+    font-size: 1rem;
+}
+
+/* Conclusion chapter */
+.chapter.conclusion {
+    border-bottom: none;
+    padding-bottom: 10px;
+}
+
+/* Active chapter highlight */
+.chapter.active {
+    background: #f1f1f1;
+    border-left: 4px solid #2d2d2d;
+    padding-left: 20px;
+    transition: background 0.3s;
+}
+
+/* Map styles */
+#map {
+    width: 60%;
+    height: 100%;
+}
+
+/* ==================================================
+   MAP CONTROL BUTTONS
+================================================== */
+
+.map-buttons {
+    text-align: center;
+    margin: 15px 0;
+}
+
+.map-buttons button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    background-color: #2980b9;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.map-buttons button:hover {
+    background-color: #1f6391;
+}
+
+/* Reset view button */
+.reset-view-btn {
+    background: #2dc613;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.reset-view-btn:hover {
+    background: #1f6391;
+}
+
+/* ==================================================
+   CONCLUSION BOX
+================================================== */
+
+.conclusion-box {
+    padding: 40px 30px;
+    text-align: center;
+    font-size: 1.25rem;
+    line-height: 1.85;
+    max-width: 900px;
+    margin: 40px auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    color: #333;
+    letter-spacing: 0.3px;
+    font-weight: 300;
+}
+
+.conclusion-box h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #222;
+}
+
+/* ==================================================
+   FOOTER
+================================================== */
+
+footer {
+    background: #2d2d2d;
+    color: white;
+    text-align: center;
+    padding: 15px 10px;
+    font-size: 0.9rem;
+}
+
+footer a {
+    color: #2980b9;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* ==================================================
+   SCROLLBAR STYLING (optional)
+================================================== */
+
+#story::-webkit-scrollbar {
+    width: 10px;
+}
+
+#story::-webkit-scrollbar-thumb {
+    background: #b5b5b5;
+    border-radius: 5px;
+}
+
+#story::-webkit-scrollbar-track {
+    background: #f0f0f0;
+}
+
+/* ==================================================
+   RESPONSIVE LAYOUT
+================================================== */
+
+/* Tablets / medium screens */
+@media (max-width: 900px) {
+    #container {
+        flex-direction: column;
+    }
+    #story {
+        width: 100%;
+        height: 40vh;
+
+        /* Prevent double-scrolling */
+        overflow-y: visible;
+    }
+    #map {
+        width: 100%;
+        height: 60vh;
+    }
+
+    /* Allow page to scroll instead of #story */
+    body {
+        overflow-y: auto;
+    }
+}
+
+/* Mobile / small screens */
+@media (max-width: 600px) {
+    .header-overlay h1 {
+        font-size: 1.8rem;
+    }
+    .header-overlay h2 {
+        font-size: 1rem;
+    }
+    .intro-text {
+        padding: 20px 15px;
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+    #story {
+        padding: 15px;
+    }
+
+    /* Resize back-to-top button */
+    .back-to-top {
+        height: 45px;
+        width: 45px;
+        font-size: 18px;
+    }
+}
+
+/* Very small phones */
+@media (max-width: 380px) {
+    .back-to-top {
+        display: none;
+    }
+}
+
+/* Extra-large screens */
+@media (min-width: 1600px) {
+    #story {
+        max-width: 550px;
+    }
+}
