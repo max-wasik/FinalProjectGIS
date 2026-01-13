@@ -1,0 +1,3 @@
+=> Cleanup vom Code:
+=> Backend Datenspeicherung: Joseph: 
+=> Frontend Design:
