@@ -1,105 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dangerzones in Graz</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PPGIS Safety Map – Graz</title>
 
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <!-- ===============================
-         HEADER SECTION
-    =============================== -->
-    <header class="header">
-
-        <!-- Text overlay (top-right corner) -->
-        <div class="header-overlay">
-            <h1>Dangerzones in Graz</h1>
-            <h2>An interactive PPGIS Project</h2>
-            <p class="created-by">Created by Maximilian, Patrick, Emilia and Lena</p>
-        </div>
-
-    </header>
-
-    <!-- ===============================
-         INTRODUCTION TEXT
-    =============================== -->
-    <div class="intro-text">
-        <p>
-            Welcome to our interactive StoryMap of Graz!  
-            This project guides you through the city’s ten most iconic attractions which are places that reflect
-            the rich cultural heritage, architectural diversity and vibrant urban life of Austria’s
-            second-largest city. From Renaissance buildings in the historic Old Town and baroque palaces to modern art museums
-            and lively markets, Graz offers a unique blend of history and contemporary culture.
-            <br><br>
-            As you scroll, the map will automatically follow your journey, zooming in on each landmark
-            to give you a deeper geographic sense of how the city is structured. Whether you're planning
-            a visit, exploring for academic purposes, or simply discovering new corners of Graz, this
-            StoryMap provides a visual introduction to the most important sites
-            that shape the character of the city.
-        </p>
+<header class="header">
+    <div class="header-overlay">
+        <h1>Where do you feel unsafe in Graz?</h1>
+        <p>Help us collect citizen-based safety perceptions</p>
     </div>
+</header>
 
-    <!-- Back to Top Button -->
-    <button class="back-to-top">↑</button>
+<div class="intro-text">
+    <p>
+        Click on the map to mark a location where you feel unsafe.
+        Choose your mode of transport and whether this feeling occurs
+        during the day or at night.
+        Your contribution is anonymous.
+    </p>
+</div>
 
-    <!-- ===============================
-         MAIN CONTAINER (STORY + MAP)
-    =============================== -->
-    <div id="container">
+<div id="map"></div>
 
-        <!-- ===============================
-             LEFT SIDE: SCROLLING STORY
-        =============================== -->
+<footer>
+    <p>PPGIS Project – University of Graz</p>
+</footer>
 
-
-        </div> <!-- End of #story -->
-
-        <!-- ===============================
-             RIGHT SIDE: INTERACTIVE MAP
-        =============================== -->
-        <div id="map"></div>
-
-    </div> <!-- End of #container -->
-
-    <!-- ===============================
-        CONCLUSION BOX
-    =============================== -->
-    <div class="conclusion-box">
-        <h2>Conclusion</h2>
-        <p>
-            This StoryMap highlights the ten most popular places in Graz and shows how geography, 
-            architecture, and cultural heritage are connected within the city. By combining 
-            interactive mapping with a narrative structure, our website aims to make spatial information 
-            intuitive and engaging. The project demonstrates how urban exploration can be transformed into a dynamic digital experience.
-
-            Graz offers an exceptional variety of culture, architecture, and history.
-            Come to Graz and experience them yourself!
-            <br><br>
-            Thank you for exploring Graz with us!
-        </p>
-    </div>
-
-    <!-- ===============================
-         FOOTER
-    =============================== -->
-    <footer>
-        <p>Contact: <a href="mailto:group-project@example.com">group-project@example.com</a> | Phone: +43 123 456 789</p>
-        <p>© 2025 Graz StoryMap Group — All rights reserved.</p>
-    </footer>
-
-    <!-- ===============================
-         SCRIPTS
-    =============================== -->
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <!-- Custom JS -->
-    <script src="script.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="script.js"></script>
 
 </body>
 </html>
