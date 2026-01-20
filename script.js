@@ -1,10 +1,19 @@
+// ======================================================
+// PPGIS SAFETY MAP – GRAZ
+// ======================================================
+
 // ------------------------------------------------------
-// Leaflet map setup
+// MAP SETUP
 // ------------------------------------------------------
 
 const mapCenter = [47.0707, 15.4395];
 const mapZoom = 13;
-const map = L.map('map', { center: mapCenter, zoom: mapZoom, scrollWheelZoom: true });
+
+const map = L.map('map', {
+    center: mapCenter,
+    zoom: mapZoom,
+    scrollWheelZoom: window.innerWidth > 900
+});
 
 // Basemap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -15,97 +24,126 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // Scale bar
 L.control.scale().addTo(map);
 
-// Green marker icon
-const greenIcon = new L.Icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-});
+// ------------------------------------------------------
+// ICONS BY TRANSPORT MODE
+// ------------------------------------------------------
 
-// Attractions
-const attractions = [
-    { name: "Schloßberg", coords: [47.07670, 15.43719], link: "https://www.graztourismus.at/de/sightseeing-kultur/sehenswuerdigkeiten/grazer-schlossberg_shg_1480" },
-    { name: "Old Town of Graz", coords: [47.0707, 15.4395], link: "https://www.graztourismus.at/de/erholung-freizeit-sport/spazieren-wandern/tour-uebersicht/altstadtrunde-durchs-weltkulturerbe-graz_td_520" },
-    { name: "Eggenberg Palace", coords: [47.07376, 15.39473], link: "https://www.graztourismus.at/de/sightseeing-kultur/sehenswuerdigkeiten/schloss-eggenberg-graz_shg_1478"},
-    { name: "Styrian Armoury", coords: [47.07027, 15.43979], link: "https://www.graztourismus.at/de/sightseeing-kultur/sehenswuerdigkeiten/landeszeughaus_shg_1464" },
-    { name: "Clock Tower", coords: [47.07388, 15.43763], link: "https://www.graztourismus.at/de/sightseeing-kultur/sehenswuerdigkeiten/uhrturm_shg_1488" },
-    { name: "Kunsthaus Graz", coords: [47.07124, 15.43409], link: "https://www.graztourismus.at/de/sightseeing-kultur/sehenswuerdigkeiten/kunsthaus-graz_shg_1462" },
-    { name: "Kaiser-Josef Market", coords: [47.06899, 15.44694], link: "https://www.graztourismus.at/de/sightseeing-kultur/sehenswuerdigkeiten/kaiser-josef-markt-in-graz_shg_1458" },
-    { name: "Hauptplatz", coords: [47.07094, 15.43830], link: "https://www.graztourismus.at/de/sightseeing-kultur/sehenswuerdigkeiten/hauptplatz-rathaus_shg_1456" },
-    { name: "Double Spiral Staircase", coords: [47.07297, 15.44286], link: "https://www.graztourismus.at/de/sightseeing-kultur/sehenswuerdigkeiten/grazer-burg-doppelwendeltreppe_shg_1444" },
-    { name: "Kastner & Öhler - Paradeishof", coords: [47.07221, 15.43696], link: "https://www.graztourismus.at/de/sightseeing-kultur/sehenswuerdigkeiten/kastner-Oehler-graz_shg_7520" }
-];
+const icons = {
+    foot: L.icon({
+        iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+        iconSize: [28, 28]
+    }),
+    bike: L.icon({
+        iconUrl: 'https://cdn-icons-png.flaticon.com/512/2972/2972185.png',
+        iconSize: [28, 28]
+    }),
+    car: L.icon({
+        iconUrl: 'https://cdn-icons-png.flaticon.com/512/743/743922.png',
+        iconSize: [28, 28]
+    }),
+    public: L.icon({
+        iconUrl: 'https://cdn-icons-png.flaticon.com/512/61/61213.png',
+        iconSize: [28, 28]
+    })
+};
 
-// Keep references to markers
-const markers = [];
-const chapters = document.querySelectorAll(".chapter");
+// ------------------------------------------------------
+// DATA STORAGE (LOCAL)
+// ------------------------------------------------------
 
-attractions.forEach((a, index) => {
-    const marker = L.marker(a.coords, { icon: greenIcon }).addTo(map);
-    marker.bindPopup(`<b>${a.name}</b><br>${a.link ? `<a href="${a.link}" target="_blank">link</a>` : ""}`);
-    markers.push(marker);
+let reports = JSON.parse(localStorage.getItem('ppgisReports')) || [];
+const reportMarkers = [];
 
-    // Clicking marker scrolls to chapter
-    marker.on('click', () => {
-        const chapterElement = chapters[index];
-        chapterElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+// ------------------------------------------------------
+// LOAD EXISTING REPORTS
+// ------------------------------------------------------
 
-        chapters.forEach(c => c.classList.remove("active"));
-        chapterElement.classList.add("active");
+reports.forEach(report => addReportMarker(report));
 
-        const lat = chapterElement.getAttribute("data-lat");
-        const lng = chapterElement.getAttribute("data-lng");
-        const zoom = chapterElement.getAttribute("data-zoom");
-        map.flyTo([lat, lng], zoom);
+// ------------------------------------------------------
+// MAP CLICK → DATA COLLECTION
+// ------------------------------------------------------
 
-        marker.openPopup();
-    });
+map.on('click', function (e) {
+
+    const formHTML = `
+        <form id="ppgis-form" style="width:220px">
+            <label><strong>Transport mode</strong></label><br>
+            <select id="mode" required style="width:100%">
+                <option value="foot">On foot</option>
+                <option value="bike">Bike</option>
+                <option value="car">Car</option>
+                <option value="public">Public transport</option>
+            </select><br><br>
+
+            <label><strong>Time of day</strong></label><br>
+            <select id="time" required style="width:100%">
+                <option value="day">Day</option>
+                <option value="night">Night</option>
+            </select><br><br>
+
+            <label><strong>Comment (optional)</strong></label><br>
+            <textarea id="comment" rows="3" style="width:100%"></textarea><br><br>
+
+            <button type="submit" style="width:100%">Submit</button>
+        </form>
+    `;
+
+    const popup = L.popup()
+        .setLatLng(e.latlng)
+        .setContent(formHTML)
+        .openOn(map);
+
+    // Wait for popup DOM
+    setTimeout(() => {
+        const form = document.getElementById('ppgis-form');
+        if (!form) return;
+
+        form.addEventListener('submit', function (ev) {
+            ev.preventDefault();
+
+            const report = {
+                lat: e.latlng.lat,
+                lng: e.latlng.lng,
+                mode: document.getElementById('mode').value,
+                time: document.getElementById('time').value,
+                comment: document.getElementById('comment').value,
+                timestamp: new Date().toISOString()
+            };
+
+            reports.push(report);
+            localStorage.setItem('ppgisReports', JSON.stringify(reports));
+
+            addReportMarker(report);
+            map.closePopup();
+        });
+    }, 100);
 });
 
 // ------------------------------------------------------
-// Scroll-driven map movement
+// ADD MARKER TO MAP
 // ------------------------------------------------------
-function setActiveChapter(chapter) {
-    chapters.forEach(c => c.classList.remove("active"));
-    chapter.classList.add("active");
 
-    const lat = chapter.getAttribute("data-lat");
-    const lng = chapter.getAttribute("data-lng");
-    const zoom = chapter.getAttribute("data-zoom");
+function addReportMarker(report) {
 
-    map.flyTo([lat, lng], zoom);
+    const marker = L.marker([report.lat, report.lng], {
+        icon: icons[report.mode] || icons.foot
+    }).addTo(map);
 
-    // Open popup for corresponding marker
-    const index = Array.from(chapters).indexOf(chapter);
-    if (markers[index]) markers[index].openPopup();
+    marker.bindPopup(`
+        <strong>Transport:</strong> ${report.mode}<br>
+        <strong>Time:</strong> ${report.time}<br>
+        ${report.comment ? `<strong>Comment:</strong> ${report.comment}<br>` : ''}
+        <small>${new Date(report.timestamp).toLocaleString()}</small>
+    `);
+
+    reportMarkers.push(marker);
 }
 
-// Catch range for smoothe scrolling
-function isElementInViewport(element) {
-    const rect = element.getBoundingClientRect();
-    const vh = window.innerHeight;
-    const triggerTop = vh * 0.25;
-    const triggerBottom = vh * 0.75;
-    return rect.top < triggerBottom && rect.bottom > triggerTop;
-}
-
-document.getElementById("story").addEventListener("scroll", () => {
-    chapters.forEach(chapter => {
-        if (isElementInViewport(chapter)) {
-            setActiveChapter(chapter);
-        }
-    });
-});
-
-// Initialize first chapter as active
-setActiveChapter(chapters[0]);
-
 // ------------------------------------------------------
-// Reset View button on map
+// RESET VIEW BUTTON
 // ------------------------------------------------------
+
 const ResetControl = L.Control.extend({
     options: { position: 'bottomright' },
     onAdd: function () {
@@ -118,14 +156,13 @@ const ResetControl = L.Control.extend({
 });
 map.addControl(new ResetControl());
 
-
 // ------------------------------------------------------
-// Back to Top Button
+// BACK TO TOP BUTTON
 // ------------------------------------------------------
 
 const backToTopBtn = document.querySelector('.back-to-top');
-
-// Smooth scroll to top
-backToTopBtn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
+if (backToTopBtn) {
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
