@@ -80,6 +80,7 @@ map.on('click', function (e) {
             <select id="time" required style="width:100%">
                 <option value="day">Day</option>
                 <option value="night">Night</option>
+                <option value="both">Both</option>
             </select><br><br>
 
             <label><strong>Comment (optional)</strong></label><br>
