@@ -8,6 +8,4 @@
     Age group (e.g. 0-19, 20-29, 30-39, 40-49, 50-59, 60-69, 70+)
     Gender (female / male / diverse / prefer not to say)
 
-
-
-
+    
