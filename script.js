@@ -69,11 +69,15 @@ map.on('click', function (e) {
   const formHTML = `
 <form id="ppgis-form" style="width:220px">
 
-<label><strong>Transport mode</strong></label><br>
-<label><input type="checkbox" name="mode" value="foot"> On foot</label><br>
-<label><input type="checkbox" name="mode" value="bike"> Bike</label><br>
-<label><input type="checkbox" name="mode" value="car"> Car</label><br>
-<label><input type="checkbox" name="mode" value="public"> Public transport</label><br><br>
+<form id="ppgis-form" style="width:220px">
+    <label><strong>Transport mode</strong></label><br>
+
+    <label><input type="checkbox" name="mode[]" value="foot"> On foot</label><br>
+    <label><input type="checkbox" name="mode[]" value="bike"> Bike</label><br>
+    <label><input type="checkbox" name="mode[]" value="car"> Car</label><br>
+    <label><input type="checkbox" name="mode[]" value="public"> Public transport</label><br><br>
+
+
 
 <label><strong>Time of day</strong></label><br>
 <select id="time" required style="width:100%">
