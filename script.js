@@ -38,11 +38,11 @@ const icons = {
         iconSize: [28, 28]
     }),
     car: L.icon({
-        iconUrl: 'https://cdn-icons-png.flaticon.com/512/743/743922.png',
+        iconUrl: 'https://cdn-icons-png.flaticon.com/512/75/75782.png',
         iconSize: [28, 28]
     }),
     public: L.icon({
-        iconUrl: 'https://cdn-icons-png.flaticon.com/512/61/61213.png',
+        iconUrl: 'https://static.thenounproject.com/png/1661272-200.png',
         iconSize: [28, 28]
     })
 };
