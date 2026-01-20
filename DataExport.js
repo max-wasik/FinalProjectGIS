@@ -1,17 +1,3 @@
-let mapcenter = [48.20851180836414, 16.373138584827505];
-var map = L.map('map', {zoomControl: false}).setView(mapcenter, 11);
-var osm = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png', {
-   attribution:'&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attributions">CARTO</a>',
-   subdomains: 'abcd',
-   maxZoom: 20,
-   minZoom: 0}).addTo(map);
-
-// Zoom Control
-var zoomControl = L.control.zoom({
-  position: "bottomright"
-});
-zoomControl.addTo(map);
-
 let drawnItems = L.featureGroup().addTo(map); 
 
 function saveToFile(content, fileName) {
