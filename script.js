@@ -75,27 +75,30 @@ map.on('click', function (e) {
     if (e.originalEvent.target.closest('.leaflet-popup')) return;
 
     const formHTML = `
-        <form id="ppgis-form" style="width:220px">
+    <div id="ppgis-form" style="width:220px">
 
-            <label><strong>Transport mode</strong></label><br>
-            <label><input type="checkbox" name="mode[]" value="foot"> On foot</label><br>
-            <label><input type="checkbox" name="mode[]" value="bike"> Bike</label><br>
-            <label><input type="checkbox" name="mode[]" value="car"> Car</label><br>
-            <label><input type="checkbox" name="mode[]" value="public"> Public transport</label><br><br>
+        <label><strong>Transport mode</strong></label><br>
+        <label><input type="checkbox" name="mode" value="foot"> On foot</label><br>
+        <label><input type="checkbox" name="mode" value="bike"> Bike</label><br>
+        <label><input type="checkbox" name="mode" value="car"> Car</label><br>
+        <label><input type="checkbox" name="mode" value="public"> Public transport</label><br><br>
 
-            <label><strong>Time of day</strong></label><br>
-            <select id="time" style="width:100%">
-                <option value="day">Day</option>
-                <option value="night">Night</option>
-                <option value="both">Both</option>
-            </select><br><br>
+        <label><strong>Time of day</strong></label><br>
+        <select id="time" style="width:100%">
+            <option value="day">Day</option>
+            <option value="night">Night</option>
+            <option value="both">Both</option>
+        </select><br><br>
 
-            <label><strong>Comment (optional)</strong></label><br>
-            <textarea id="comment" rows="3" style="width:100%"></textarea><br><br>
+        <label><strong>Comment (optional)</strong></label><br>
+        <textarea id="comment" rows="3" style="width:100%"></textarea><br><br>
 
-            <button type="submit" style="width:100%">Submit</button>
-        </form>
-    `;
+        <button id="submitReport" type="button" style="width:100%">
+            Submit
+        </button>
+    </div>
+`;
+
 
     const popup = L.popup()
         .setLatLng(e.latlng)
