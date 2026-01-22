@@ -1,3 +1,68 @@
+// ======================================================
+// PPGIS SAFETY MAP – GRAZ
+// ======================================================
+
+// ------------------------------------------------------
+// MAP SETUP
+// ------------------------------------------------------
+
+const mapCenter = [47.0707, 15.4395];
+const mapZoom = 13;
+
+const map = L.map('map', {
+    center: mapCenter,
+    zoom: mapZoom,
+    scrollWheelZoom: window.innerWidth > 900
+});
+
+// Basemap
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+// Scale bar
+L.control.scale().addTo(map);
+
+// ------------------------------------------------------
+// ICONS BY TRANSPORT MODE
+// ------------------------------------------------------
+
+const icons = {
+    foot: L.icon({
+        iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+        iconSize: [28, 28]
+    }),
+    bike: L.icon({
+        iconUrl: 'https://cdn-icons-png.flaticon.com/512/2972/2972185.png',
+        iconSize: [28, 28]
+    }),
+    car: L.icon({
+        iconUrl: 'https://cdn-icons-png.flaticon.com/512/75/75782.png',
+        iconSize: [28, 28]
+    }),
+    public: L.icon({
+        iconUrl: 'https://static.thenounproject.com/png/1661272-200.png',
+        iconSize: [28, 28]
+    })
+};
+
+function getIconForModes(modes) {
+    return icons[modes[0]] || icons.foot;
+}
+
+// ------------------------------------------------------
+// DATA STORAGE (LOCAL ONLY)
+// ------------------------------------------------------
+
+let reports = JSON.parse(localStorage.getItem('ppgisReports')) || [];
+
+// ------------------------------------------------------
+// LOAD EXISTING REPORTS
+// ------------------------------------------------------
+
+reports.forEach(report => addReportMarker(report));
+
 // ------------------------------------------------------
 // MAP CLICK → DATA COLLECTION
 // ------------------------------------------------------
@@ -80,3 +145,41 @@ map.on('popupopen', function (ev) {
         map.closePopup();
     });
 });
+
+
+// ------------------------------------------------------
+// ADD MARKER TO MAP
+// ------------------------------------------------------
+
+function addReportMarker(report) {
+
+    const modes = Array.isArray(report.mode) ? report.mode : [report.mode];
+
+    const marker = L.marker([report.lat, report.lng], {
+        icon: getIconForModes(modes)
+    }).addTo(map);
+
+    marker.bindPopup(`
+        <strong>Transport:</strong> ${modes.join(', ')}<br>
+        <strong>Time:</strong> ${report.time}<br>
+        ${report.comment ? `<strong>Comment:</strong> ${report.comment}<br>` : ''}
+        <small>${new Date(report.timestamp).toLocaleString()}</small>
+    `);
+}
+
+
+// ------------------------------------------------------
+// RESET VIEW BUTTON
+// ------------------------------------------------------
+
+const ResetControl = L.Control.extend({
+    options: { position: 'bottomright' },
+    onAdd: function () {
+        const btn = L.DomUtil.create('button', 'reset-view-btn');
+        btn.innerText = 'Reset View';
+        L.DomEvent.disableClickPropagation(btn);
+        btn.onclick = () => map.setView(mapCenter, mapZoom);
+        return btn;
+    }
+});
+map.addControl(new ResetControl());
