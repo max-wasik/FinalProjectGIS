@@ -47,7 +47,6 @@ const icons = {
     })
 };
 
-// First selected mode defines the icon
 function getIconForModes(modes) {
     return icons[modes[0]] || icons.foot;
 }
@@ -69,8 +68,6 @@ reports.forEach(report => addReportMarker(report));
 // ------------------------------------------------------
 
 map.on('click', function (e) {
-
-    console.log("MAP CLICKED");
 
     const popupHTML = `
         <div id="ppgis-form" style="width:220px">
@@ -95,23 +92,51 @@ map.on('click', function (e) {
         </div>
     `;
 
-    const popup = L.popup()
+    L.popup()
         .setLatLng(e.latlng)
         .setContent(popupHTML)
         .openOn(map);
+});
 
-    popup.once('add', function () {
-        console.log("POPUP ADDED");
 
-        const container = popup.getElement();
-        const submitBtn = container.querySelector('#submitReport');
+// ------------------------------------------------------
+// POPUP OPEN EVENT (reliable)
+// ------------------------------------------------------
 
-        console.log("submitBtn:", submitBtn);
+map.on('popupopen', function (ev) {
 
-        submitBtn.addEventListener('click', function () {
-            console.log("SUBMIT CLICKED");
-            alert("SUBMIT WORKS");
-        });
+    const container = ev.popup.getElement();
+    const submitBtn = container.querySelector('#submitReport');
+
+    // stop map click propagation
+    L.DomEvent.disableClickPropagation(container);
+    L.DomEvent.disableScrollPropagation(container);
+
+    submitBtn.addEventListener('click', function () {
+
+        const modes = Array.from(
+            container.querySelectorAll('input[type="checkbox"]:checked')
+        ).map(cb => cb.value);
+
+        if (modes.length === 0) {
+            alert("Please select at least one transport mode.");
+            return;
+        }
+
+        const report = {
+            lat: ev.popup.getLatLng().lat,
+            lng: ev.popup.getLatLng().lng,
+            mode: modes,
+            time: container.querySelector('#time').value,
+            comment: container.querySelector('#comment').value,
+            timestamp: new Date().toISOString()
+        };
+
+        reports.push(report);
+        localStorage.setItem('ppgisReports', JSON.stringify(reports));
+
+        addReportMarker(report);
+        map.closePopup();
     });
 });
 
@@ -122,7 +147,6 @@ map.on('click', function (e) {
 
 function addReportMarker(report) {
 
-    // Support old data structure (string mode)
     const modes = Array.isArray(report.mode) ? report.mode : [report.mode];
 
     const marker = L.marker([report.lat, report.lng], {
@@ -136,6 +160,7 @@ function addReportMarker(report) {
         <small>${new Date(report.timestamp).toLocaleString()}</small>
     `);
 }
+
 
 // ------------------------------------------------------
 // RESET VIEW BUTTON
