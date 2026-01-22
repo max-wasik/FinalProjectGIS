@@ -70,6 +70,8 @@ reports.forEach(report => addReportMarker(report));
 
 map.on('click', function (e) {
 
+    console.log("MAP CLICKED");
+
     const popupHTML = `
         <div id="ppgis-form" style="width:220px">
 
@@ -99,42 +101,20 @@ map.on('click', function (e) {
         .openOn(map);
 
     popup.once('add', function () {
+        console.log("POPUP ADDED");
 
         const container = popup.getElement();
         const submitBtn = container.querySelector('#submitReport');
 
-        // Stop map events
-        L.DomEvent.disableClickPropagation(container);
-        L.DomEvent.disableScrollPropagation(container);
+        console.log("submitBtn:", submitBtn);
 
         submitBtn.addEventListener('click', function () {
-
-            const modes = Array.from(
-                container.querySelectorAll('input[type="checkbox"]:checked')
-            ).map(cb => cb.value);
-
-            if (modes.length === 0) {
-                alert("Please select at least one transport mode.");
-                return;
-            }
-
-            const report = {
-                lat: e.latlng.lat,
-                lng: e.latlng.lng,
-                mode: modes,
-                time: container.querySelector('#time').value,
-                comment: container.querySelector('#comment').value,
-                timestamp: new Date().toISOString()
-            };
-
-            reports.push(report);
-            localStorage.setItem('ppgisReports', JSON.stringify(reports));
-
-            addReportMarker(report);
-            map.closePopup();
+            console.log("SUBMIT CLICKED");
+            alert("SUBMIT WORKS");
         });
     });
 });
+
 
 // ------------------------------------------------------
 // ADD MARKER TO MAP
