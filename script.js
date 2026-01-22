@@ -190,7 +190,7 @@ map.addControl(new ResetControl());
 
 
 function resetData() {
-    const confirmReset = confirm("⚠️ Willst du wirklich alle Marker und Daten löschen? Diese Aktion kann nicht rückgängig gemacht werden.");
+    const confirmReset = confirm("⚠️ DELETE ALL MARKERS AND DATA? ");
 
     if (confirmReset) {
         localStorage.removeItem('ppgisReports');
