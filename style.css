@@ -110,7 +110,7 @@ html, body {
     border-bottom: 4px solid #222;
 }
 /* Reset Button */
-.resetBtn {
+.reset-btn {
     background: #e74c3c;
     color: white;
     border: none;
@@ -120,7 +120,7 @@ html, body {
     font-weight: 700;
 }
 
-.resetBtn:hover {
+.reset-btn:hover {
     background: #c0392b;
 }
 
