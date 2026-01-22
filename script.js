@@ -183,3 +183,17 @@ const ResetControl = L.Control.extend({
     }
 });
 map.addControl(new ResetControl());
+
+// ------------------------------------------------------
+// RESET DATA BUTTON Function
+// ------------------------------------------------------   
+
+
+function resetData() {
+    const confirmReset = confirm("⚠️ Willst du wirklich alle Marker und Daten löschen? Diese Aktion kann nicht rückgängig gemacht werden.");
+
+    if (confirmReset) {
+        localStorage.removeItem('ppgisReports');
+        location.reload();
+    }
+}
