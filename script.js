@@ -69,28 +69,56 @@ reports.forEach(report => addReportMarker(report));
 
 map.on('click', function (e) {
 
-    const popupHTML = `
-        <div id="ppgis-form" style="width:220px">
+const popupHTML = `
+<div class="popup-card">
 
-            <strong>Transport mode</strong><br>
-            <label><input class="mode-checkbox" type="checkbox" value="foot"> On foot</label><br>
-            <label><input class="mode-checkbox" type="checkbox" value="bike"> Bike</label><br>
-            <label><input class="mode-checkbox" type="checkbox" value="car"> Car</label><br>
-            <label><input class="mode-checkbox" type="checkbox" value="public"> Public transport</label><br><br>
+  <div class="popup-title">
+    <h3>Feeling unsafe?</h3>
+    <p>Choose your transport mode + time</p>
+  </div>
 
-            <strong>Time of day</strong><br>
-            <select class="time-select" style="width:100%">
-                <option value="day">Day</option>
-                <option value="night">Night</option>
-                <option value="both">Both</option>
-            </select><br><br>
+  <div class="popup-section">
+    <div class="popup-label">Transport mode</div>
+    <label class="checkbox">
+      <input class="mode-checkbox" type="checkbox" value="foot">
+      <span class="checkmark"></span>
+      On foot
+    </label>
+    <label class="checkbox">
+      <input class="mode-checkbox" type="checkbox" value="bike">
+      <span class="checkmark"></span>
+      Bike
+    </label>
+    <label class="checkbox">
+      <input class="mode-checkbox" type="checkbox" value="car">
+      <span class="checkmark"></span>
+      Car
+    </label>
+    <label class="checkbox">
+      <input class="mode-checkbox" type="checkbox" value="public">
+      <span class="checkmark"></span>
+      Public transport
+    </label>
+  </div>
 
-            <strong>Comment (optional)</strong><br>
-            <textarea class="comment-text" rows="3" style="width:100%"></textarea><br><br>
+  <div class="popup-section">
+    <div class="popup-label">Time of day</div>
+    <select class="time-select">
+      <option value="day">Day</option>
+      <option value="night">Night</option>
+      <option value="both">Both</option>
+    </select>
+  </div>
 
-            <button class="submitReportBtn" type="button" style="width:100%">Submit</button>
-        </div>
-    `;
+  <div class="popup-section">
+    <div class="popup-label">Comment (optional)</div>
+    <textarea class="comment-text" rows="3"></textarea>
+  </div>
+
+  <button class="submitReportBtn">Submit</button>
+
+</div>
+`;
 
     L.popup()
         .setLatLng(e.latlng)
