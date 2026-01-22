@@ -1,3 +1,15 @@
+function saveToFile(content, fileName) {
+    let blob = new Blob([JSON.stringify(content, null, 2)], { type: "application/json" });
+    let url = URL.createObjectURL(blob);
+    let link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
+
 function downloadGeoJSON() {
 
     const age = document.getElementById('ageInput').value;
