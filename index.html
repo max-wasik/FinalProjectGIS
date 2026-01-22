@@ -29,6 +29,25 @@
 
 <div id="map"></div>
 
+<div class="intro-text">
+    <h2>About you</h2>
+
+    <label>Age</label><br>
+    <input type="number" id="ageInput" min="14" max="100" style="width:100%"><br><br>
+
+    <label>Gender</label><br>
+    <select id="genderInput" style="width:100%">
+        <option value="">Select</option>
+        <option value="female">Female</option>
+        <option value="male">Male</option>
+        <option value="diverse">Diverse</option>
+        <option value="no_answer">Prefer not to say</option>
+    </select><br><br>
+
+    <button onclick="downloadGeoJSON()">Download GeoJSON</button>
+    <button onclick="downloadCSV()">Download CSV</button>
+</div>
+
 <footer>
     <p>PPGIS Project – University of Graz</p>
 </footer>

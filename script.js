@@ -47,8 +47,13 @@ const icons = {
     })
 };
 
+// First selected mode defines the icon
+function getIconForModes(modes) {
+    return icons[modes[0]] || icons.foot;
+}
+
 // ------------------------------------------------------
-// DATA STORAGE (LOCAL)
+// DATA STORAGE (LOCAL ONLY)
 // ------------------------------------------------------
 
 let reports = JSON.parse(localStorage.getItem('ppgisReports')) || [];
@@ -64,104 +69,73 @@ reports.forEach(report => addReportMarker(report));
 // MAP CLICK → DATA COLLECTION
 // ------------------------------------------------------
 
-// Listen for clicks on the map
 map.on('click', function (e) {
 
-    // -------------------------------------------------------
-    // IMPORTANT:
-    // If the user clicks inside an open popup (e.g. Submit),
-    // that click would normally bubble up to the map and
-    // trigger this handler again, opening a new popup.
-    // This check prevents that.
-    // -------------------------------------------------------
-    if (e.originalEvent.target.closest('.leaflet-popup')) {
-        return; // Ignore clicks coming from the popup
-    }
+    // Prevent popup click bubbling
+    if (e.originalEvent.target.closest('.leaflet-popup')) return;
 
-    // HTML content of the popup (a form)
     const formHTML = `
-    <form id="ppgis-form" style="width:220px">
+        <form id="ppgis-form" style="width:220px">
 
-        <label><strong>Transport mode</strong></label><br>
-        <label><input type="checkbox" name="mode[]" value="foot"> On foot</label><br>
-        <label><input type="checkbox" name="mode[]" value="bike"> Bike</label><br>
-        <label><input type="checkbox" name="mode[]" value="car"> Car</label><br>
-        <label><input type="checkbox" name="mode[]" value="public"> Public transport</label><br><br>
+            <label><strong>Transport mode</strong></label><br>
+            <label><input type="checkbox" name="mode[]" value="foot"> On foot</label><br>
+            <label><input type="checkbox" name="mode[]" value="bike"> Bike</label><br>
+            <label><input type="checkbox" name="mode[]" value="car"> Car</label><br>
+            <label><input type="checkbox" name="mode[]" value="public"> Public transport</label><br><br>
 
-        <label><strong>Time of day</strong></label><br>
-        <select id="time" style="width:100%">
-            <option value="day">Day</option>
-            <option value="night">Night</option>
-            <option value="both">Both</option>
-        </select><br><br>
+            <label><strong>Time of day</strong></label><br>
+            <select id="time" style="width:100%">
+                <option value="day">Day</option>
+                <option value="night">Night</option>
+                <option value="both">Both</option>
+            </select><br><br>
 
-        <label><strong>Comment (optional)</strong></label><br>
-        <textarea id="comment" rows="3" style="width:100%"></textarea><br><br>
+            <label><strong>Comment (optional)</strong></label><br>
+            <textarea id="comment" rows="3" style="width:100%"></textarea><br><br>
 
-        <button type="submit" style="width:100%">Submit</button>
-    </form>
+            <button type="submit" style="width:100%">Submit</button>
+        </form>
     `;
 
-    // Create and open the popup at the clicked location
     const popup = L.popup()
         .setLatLng(e.latlng)
         .setContent(formHTML)
         .openOn(map);
 
-    // -------------------------------------------------------
-    // Wait until the popup is actually added to the DOM
-    // (this guarantees that getElementById will work)
-    // -------------------------------------------------------
     popup.once('add', function () {
 
-        // Get the form element inside the popup
         const form = document.getElementById('ppgis-form');
         if (!form) return;
 
-        // ---------------------------------------------------
-        // Prevent clicks inside the popup from reaching
-        // the map (critical to stop popup reopening)
-        // ---------------------------------------------------
+        // Stop event propagation inside popup
         L.DomEvent.disableClickPropagation(popup.getElement());
         L.DomEvent.disableScrollPropagation(popup.getElement());
 
-        // Handle form submission
         form.addEventListener('submit', function (ev) {
-            ev.preventDefault(); // Stop normal form submission (page reload)
+            ev.preventDefault();
 
-            // Collect all checked transport mode checkboxes
             const modes = Array.from(
                 form.querySelectorAll('input[name="mode[]"]:checked')
             ).map(cb => cb.value);
 
-            // Require at least one transport mode
             if (modes.length === 0) {
                 alert('Please select at least one transport mode.');
                 return;
             }
 
-            // Build the report object
             const report = {
                 lat: e.latlng.lat,
                 lng: e.latlng.lng,
-                mode: modes,               // array of selected modes
+                mode: modes,
                 time: form.querySelector('#time').value,
                 comment: form.querySelector('#comment').value,
                 timestamp: new Date().toISOString()
             };
 
-            // Store the report locally
             reports.push(report);
             localStorage.setItem('ppgisReports', JSON.stringify(reports));
 
-            // Add a marker for the report
             addReportMarker(report);
-
-            // ------------------------------------------------
-            // Close the popup.
-            // Because map-click bubbling is disabled,
-            // the popup will NOT reopen.
-            // ------------------------------------------------
             map.closePopup();
         });
     });
@@ -174,11 +148,11 @@ map.on('click', function (e) {
 function addReportMarker(report) {
 
     const marker = L.marker([report.lat, report.lng], {
-        icon: icons[report.mode] || icons.foot
+        icon: getIconForModes(report.mode)
     }).addTo(map);
 
     marker.bindPopup(`
-        <strong>Transport:</strong> ${report.mode}<br>
+        <strong>Transport:</strong> ${report.mode.join(', ')}<br>
         <strong>Time:</strong> ${report.time}<br>
         ${report.comment ? `<strong>Comment:</strong> ${report.comment}<br>` : ''}
         <small>${new Date(report.timestamp).toLocaleString()}</small>
@@ -204,12 +178,6 @@ const ResetControl = L.Control.extend({
 map.addControl(new ResetControl());
 
 // ------------------------------------------------------
-// BACK TO TOP BUTTON
+// OPTIONAL: CLEAR ALL DATA (FOR TESTING)
 // ------------------------------------------------------
-
-const backToTopBtn = document.querySelector('.back-to-top');
-if (backToTopBtn) {
-    backToTopBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-}
+// localStorage.removeItem('ppgisReports');
