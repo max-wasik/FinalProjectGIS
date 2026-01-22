@@ -2,6 +2,10 @@
 // PPGIS SAFETY MAP – GRAZ
 // ======================================================
 
+// ------------------------------------------------------
+// MAP SETUP
+// ------------------------------------------------------
+
 const mapCenter = [47.0707, 15.4395];
 const mapZoom = 13;
 
@@ -17,34 +21,51 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
+// Scale bar
 L.control.scale().addTo(map);
 
 // ------------------------------------------------------
-// ICONS
+// ICONS BY TRANSPORT MODE
 // ------------------------------------------------------
 
 const icons = {
-    foot: L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png', iconSize: [28, 28] }),
-    bike: L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/2972/2972185.png', iconSize: [28, 28] }),
-    car: L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/75/75782.png', iconSize: [28, 28] }),
-    public: L.icon({ iconUrl: 'https://static.thenounproject.com/png/1661272-200.png', iconSize: [28, 28] })
+    foot: L.icon({
+        iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+        iconSize: [28, 28]
+    }),
+    bike: L.icon({
+        iconUrl: 'https://cdn-icons-png.flaticon.com/512/2972/2972185.png',
+        iconSize: [28, 28]
+    }),
+    car: L.icon({
+        iconUrl: 'https://cdn-icons-png.flaticon.com/512/75/75782.png',
+        iconSize: [28, 28]
+    }),
+    public: L.icon({
+        iconUrl: 'https://static.thenounproject.com/png/1661272-200.png',
+        iconSize: [28, 28]
+    })
 };
 
+// First selected mode defines the icon
 function getIconForModes(modes) {
     return icons[modes[0]] || icons.foot;
 }
 
 // ------------------------------------------------------
-// DATA
+// DATA STORAGE (LOCAL ONLY)
 // ------------------------------------------------------
 
 let reports = JSON.parse(localStorage.getItem('ppgisReports')) || [];
 
-// Load stored markers
-reports.forEach(r => addReportMarker(r));
+// ------------------------------------------------------
+// LOAD EXISTING REPORTS
+// ------------------------------------------------------
+
+reports.forEach(report => addReportMarker(report));
 
 // ------------------------------------------------------
-// MAP CLICK
+// MAP CLICK → DATA COLLECTION
 // ------------------------------------------------------
 
 map.on('click', function (e) {
@@ -82,6 +103,7 @@ map.on('click', function (e) {
         const container = popup.getElement();
         const submitBtn = container.querySelector('#submitReport');
 
+        // Stop map events
         L.DomEvent.disableClickPropagation(container);
         L.DomEvent.disableScrollPropagation(container);
 
@@ -115,11 +137,12 @@ map.on('click', function (e) {
 });
 
 // ------------------------------------------------------
-// ADD MARKER
+// ADD MARKER TO MAP
 // ------------------------------------------------------
 
 function addReportMarker(report) {
 
+    // Support old data structure (string mode)
     const modes = Array.isArray(report.mode) ? report.mode : [report.mode];
 
     const marker = L.marker([report.lat, report.lng], {
@@ -133,3 +156,19 @@ function addReportMarker(report) {
         <small>${new Date(report.timestamp).toLocaleString()}</small>
     `);
 }
+
+// ------------------------------------------------------
+// RESET VIEW BUTTON
+// ------------------------------------------------------
+
+const ResetControl = L.Control.extend({
+    options: { position: 'bottomright' },
+    onAdd: function () {
+        const btn = L.DomUtil.create('button', 'reset-view-btn');
+        btn.innerText = 'Reset View';
+        L.DomEvent.disableClickPropagation(btn);
+        btn.onclick = () => map.setView(mapCenter, mapZoom);
+        return btn;
+    }
+});
+map.addControl(new ResetControl());
