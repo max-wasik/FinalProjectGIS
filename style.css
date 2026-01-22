@@ -78,27 +78,6 @@ html, body {
     font-size: 1rem;
 }
 
-.intro-text button {
-    width: 48%;
-    padding: 10px;
-    margin-top: 12px;
-    border: none;
-    border-radius: 10px;
-    font-size: 1rem;
-    cursor: pointer;
-    background: #222;
-    color: white;
-    transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.intro-text button:hover {
-    transform: translateY(-2px);
-    background: #444;
-}
-
-.intro-text button + button {
-    margin-left: 4%;
-}
 
 /* -----------------------------
    MAP
@@ -108,20 +87,6 @@ html, body {
     width: 100%;
     border-top: 4px solid #222;
     border-bottom: 4px solid #222;
-}
-/* Reset Button */
-button.reset-btn {
-    background: #e74c3c;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 14px;
-    cursor: pointer;
-    font-weight: 700;
-}
-
-button.reset-btn:hover {
-    background: #c0392b;
 }
 
 

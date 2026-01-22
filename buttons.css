@@ -1,0 +1,32 @@
+.button-bar {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;   /* wichtig für mobile */
+  margin: 20px auto;
+  max-width: 800px;
+}
+
+.btn {
+  flex: 1;                 /* gleiche Breite */
+  min-width: 160px;        /* verhindert zu kleine Buttons */
+  padding: 12px 10px;
+  border: none;
+  border-radius: 12px;
+  background: #222;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #111;
+}
+
+.resetBtn {
+  background: #e74c3c;
+}
+
+.resetBtn:hover {
+  background: #c0392b;
+}
