@@ -1,11 +1,1 @@
-=> Cleanup vom Code: Max:
-=> Backend Datenspeicherung: Joseph: 
-=> Frontend Design:
-=> Froschungsfrage + Umfragedesign: 
-    Places where poeople feel unsafe while getting around
-    per foot, bike, public transport or car (or other)?
-    at what time of the day? day, night or both?
-    Age group (e.g. 0-19, 20-29, 30-39, 40-49, 50-59, 60-69, 70+)
-    Gender (female / male / diverse / prefer not to say)
-
-    
+No current tasks!
