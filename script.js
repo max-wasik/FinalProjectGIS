@@ -30,7 +30,7 @@ L.control.scale().addTo(map);
 
 const icons = {
     foot: L.icon({
-        iconUrl: 'https://static.vecteezy.com/system/resources/thumbnails/069/295/945/small/exploring-digital-mapping-innovations-global-location-modern-technology-aerial-geolocation-concepts-png.png',
+        iconUrl: 'https://cdn-icons-png.flaticon.com/512/25/25613.png',
         iconSize: [28, 28]
     }),
     bike: L.icon({
