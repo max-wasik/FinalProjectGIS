@@ -2,14 +2,14 @@
   display: flex;
   gap: 10px;
   justify-content: center;
-  flex-wrap: wrap;   /* wichtig für mobile */
+  flex-wrap: wrap;   
   margin: 20px auto;
   max-width: 800px;
 }
 
 .btn {
-  flex: 1;                 /* gleiche Breite */
-  min-width: 160px;        /* verhindert zu kleine Buttons */
+  flex: 1;              
+  min-width: 160px;     
   padding: 12px 10px;
   border: none;
   border-radius: 12px;

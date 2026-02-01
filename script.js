@@ -64,7 +64,7 @@ let reports = JSON.parse(localStorage.getItem('ppgisReports')) || [];
 reports.forEach(report => addReportMarker(report));
 
 // ------------------------------------------------------
-// MAP CLICK → DATA COLLECTION
+// MAP CLICK → DATA COLLECTION via POPUP
 // ------------------------------------------------------
 
 map.on('click', function (e) {
@@ -128,7 +128,7 @@ const popupHTML = `
 
 
 // ------------------------------------------------------
-// POPUP OPEN EVENT (reliable)
+// POPUP OPEN EVENT (reliable) ((bug fixing attempts))
 // ------------------------------------------------------
 
 map.on('popupopen', function (ev) {
@@ -136,7 +136,7 @@ map.on('popupopen', function (ev) {
     const container = ev.popup.getElement();
     const submitBtn = container.querySelector('.submitReportBtn');
 
-    // safety check
+    // check
     if (!submitBtn) {
         console.error("Submit button not found!");
         return;
